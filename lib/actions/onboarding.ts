@@ -4,7 +4,7 @@ import { createServer } from "@/lib/supabase/server";
 
 export async function step0(userId: string) {
   const supabase = await createServer(); 
-  const { data,error } = await supabase.from("planner_profile").select("onboarding_step").eq("user_id", userId).single();
+  const { data,error } = await supabase.from("planner_profile").select("onboarding_step").eq("user_id", userId).maybeSingle();
 
    if (error) {
      console.error("step0 error:", error.message);

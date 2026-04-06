@@ -6,7 +6,6 @@ import { supabase } from "@/lib/supabase/client";
 import { Loginschema, loginschema } from "@/lib/Validations/loginschema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -42,11 +41,11 @@ export default function LoginPage() {
       return;
     }
 
-    router.push("/onboarding");
+    router.push("/")
+
   };
 
   const handleGoogleLogin = async () => {
-    // console.log("object")
     if (loading) return;
 
     setLoading(true);

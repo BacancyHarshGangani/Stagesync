@@ -47,10 +47,26 @@ export async function loginservice(userdata:{email: string, password: string}) {
   });
 
   if (error) {
+    console.log(error);
     throw new Error(error.message);
   }
 
-  return data;
+  const user = data.user;
+
+  const { data: profile, error: profileError } = await supabase
+    .from("Users")
+    .select("role")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  if (profileError) {
+    throw new Error(profileError.message);
+  }
+
+  return {
+    user,
+    role: profile?.role,
+  };
 }
 
 export const logoutService = async () => {

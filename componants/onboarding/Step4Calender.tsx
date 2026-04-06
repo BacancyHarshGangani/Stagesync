@@ -7,7 +7,6 @@ export default function Step4Calendar() {
   const supabase = createClient();
 
   const [connected, setConnected] = useState(false);
-  const [isGoogleUser, setIsGoogleUser] = useState(false);
 
   useEffect(() => {
     const getStatus = async () => {
@@ -24,29 +23,35 @@ export default function Step4Calendar() {
         .single();
 
       setConnected(data?.google_cal_status);
-      // setIsGoogleUser(data?.auth_provider === "google");
+
     };
 
     getStatus();
   }, []);
 
-const connectCalendar = async () => {
-  const supabase = createClient();
+  const disconnectCalendar = async () => {
+    await fetch("/api/google/disconnect", {
+      method: "POST",
+    });
 
-  await supabase.auth.signInWithOAuth({
-    provider: "google",
-    options: {
-      scopes: "https://www.googleapis.com/auth/calendar",
-      redirectTo: `${window.location.origin}/auth/callback`,
-      queryParams: {
-        access_type: "offline",
-        prompt: "consent",
-      },
-    },
-  });
-
+    setConnected(false);
+  };
   
-};
+  const connectCalendar = async () => {
+    const supabase = createClient();
+
+    await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        scopes: "https://www.googleapis.com/auth/calendar",
+        redirectTo: `${window.location.origin}/api/callback`,
+        queryParams: {
+          access_type: "offline",
+          prompt: "consent",
+        },
+      },
+    });
+  };
 
   return (
     <div>
@@ -56,14 +61,14 @@ const connectCalendar = async () => {
           <p className="text-sm text-gray-500">
             Your confirmed bookings will sync automatically
           </p>
+
+          <button
+            onClick={disconnectCalendar}
+            className="mt-3 bg-red-500 text-white px-4 py-2"
+          >
+            Disconnect
+          </button>
         </div>
-      ) : isGoogleUser ? (
-        <button
-          onClick={connectCalendar}
-          className="bg-black text-white px-4 py-2"
-        >
-          Enable Calendar Access
-        </button>
       ) : (
         <button
           onClick={connectCalendar}
