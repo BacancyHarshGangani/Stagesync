@@ -6,7 +6,6 @@ import { supabase } from "@/lib/supabase/client";
 import { Userschema, userschema } from "@/lib/Validations/userschema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff } from "lucide-react";
 
 export default function RegisterPage() {
   const router = useRouter();

@@ -1,0 +1,1 @@
+Alter table public.events add column event_type_other text;
